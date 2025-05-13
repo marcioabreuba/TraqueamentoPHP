@@ -37,12 +37,17 @@ RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefe
 # Copie o restante dos arquivos da aplicação
 COPY . .
 
+# Adicione a configuração do VirtualHost do Laravel
+COPY laravel.conf /etc/apache2/sites-available/laravel.conf
+
 # Defina as permissões corretas para as pastas do Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Ative o mod_rewrite do Apache para URLs amigáveis do Laravel
-RUN a2enmod rewrite
+RUN a2enmod rewrite \
+    && a2dissite 000-default.conf \
+    && a2ensite laravel.conf
 
 # Exponha a porta 80 (padrão do Apache)
 EXPOSE 80
