@@ -16,6 +16,7 @@
         zip \
         unzip \
         libpq-dev \
+        libicu-dev \
     # Instale a extensão Redis via PECL
         && pecl install redis \
         && docker-php-ext-enable redis \
